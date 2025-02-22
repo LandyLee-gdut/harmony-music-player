@@ -1,0 +1,48 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "LD音乐"
+    },
+    {
+      "name": "Navigation_title",
+      "value": "推荐"
+    },
+    {
+      "name": "NavigationBar_main",
+      "value": "首页"
+    },
+    {
+      "name": "NavigationBar_mine",
+      "value": "我的"
+    },
+    {
+      "name": "SearchBar_placeholder",
+      "value": "搜索歌曲"
+    },
+    {
+      "name": "dependency_reason",
+      "value": "通过网络获取海量歌曲"
+    },
+    {
+      "name": "http_error_message",
+      "value": "网络请求错误！"
+    },
+    {
+      "name": "loading_prompt",
+      "value": "资源加载中..."
+    },
+    {
+      "name": "loading_fail",
+      "value": "资源加载失败！"
+    }
+  ]
+}

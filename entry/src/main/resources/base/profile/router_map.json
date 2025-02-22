@@ -1,0 +1,28 @@
+{
+  "routerMap": [
+    {
+      "name": "SongListPage",
+      "pageSourceFile": "src/main/ets/pages/SongListPage.ets",
+      "buildFunction": "SongListPageBuilder",
+      "data": {
+        "description": "this is Song List Page"
+      }
+    },
+    {
+      "name": "SearchResultPage",
+      "pageSourceFile": "src/main/ets/pages/SearchResultPage.ets",
+      "buildFunction": "SearchResultPageBuilder",
+      "data": {
+        "description": "this is Search Result Page"
+      }
+    },
+    {
+      "name": "MyGeDanPage",
+      "pageSourceFile": "src/main/ets/pages/MyGeDanPage.ets",
+      "buildFunction": "MyGeDanPageBuilder",
+      "data": {
+        "description": "this is Ge Dan Result Page"
+      }
+    }
+  ]
+}

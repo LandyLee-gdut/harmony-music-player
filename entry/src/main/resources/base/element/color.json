@@ -1,0 +1,92 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "brand_default_color_100",
+      "value": "#ff0a59f7"
+    },
+    {
+      "name": "brand_default_color_90",
+      "value": "#E50A59F7"
+    },
+    {
+      "name": "brand_default_color_80",
+      "value": "#cc0a59f7"
+    },
+    {
+      "name": "font_primary",
+      "value": "#e5000000"
+    },
+    {
+      "name": "font_secondary",
+      "value": "#99000000"
+    },
+    {
+      "name": "font_tertiary",
+      "value": "#66000000"
+    },
+    {
+      "name": "icon_primary",
+      "value": "#e5000000"
+    },
+    {
+      "name": "icon_emphasize",
+      "value": "#ff0a59f7"
+    },
+    {
+      "name": "background_secondary",
+      "value": "#fff1f3f5"
+    },
+    {
+      "name": "background_tertiary",
+      "value": "#ffe5e5ea"
+    },
+    {
+      "name": "background_fourth",
+      "value": "#ffd1d1d6"
+    },
+    {
+      "name": "comp_background_gray",
+      "value": "#fff1f3f5"
+    },
+    {
+      "name": "shadow_color",
+      "value": "#66000000"
+    },
+    {
+      "name": "play_text_color",
+      "value": "#99FFFFFF"
+    },
+    {
+      "name": "slider_block",
+      "value": "#00FFFFFF"
+    },
+    {
+      "name": "slider_select",
+      "value": "#DBFFFFFF"
+    },
+    {
+      "name": "slider_track",
+      "value": "#33FFFFFF"
+    },
+    {
+      "name": "select_swiper",
+      "value": "#DBFFFFFF"
+    },
+    {
+      "name": "player_background",
+      "value": "#F6F9FC"
+    },
+    {
+      "name": "player_icon_color",
+      "value": "#ED3A55"
+    },
+    {
+      "name": "album_detail_background",
+      "value": "#A9FFFFE0"
+    }
+  ]
+}
