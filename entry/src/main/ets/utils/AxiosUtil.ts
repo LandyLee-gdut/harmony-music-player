@@ -4,7 +4,7 @@ import {AxiosHttpRequest,HttpPromise} from './AxiosClient'
 import {AxiosRequestHeaders,AxiosError } from '@ohos/axios';
 import { Logger } from './Logger';
 import { promptAction } from "@kit.ArkUI";
-
+import { ApiConstant } from '../constant/ApiConstant'
 function showToast(msg:string){
   Logger.debug(msg)
   promptAction.showToast({ message: msg })
@@ -18,11 +18,15 @@ function showLoadingDialog(msg:string){
 function hideLoadingDialog() {
 
 }
+
+
+const BASE_URL = ApiConstant.BASE_URL
+
 /**
  * axios请求客户端创建
  */
 const axiosClient = new AxiosHttpRequest({
-  baseURL: "http://1333480939-2nw0dhpsvz.ap-guangzhou.tencentscf.com",
+  baseURL: BASE_URL,
   timeout: 20 * 1000,
   checkResultCode: false,
   showLoading:true,
@@ -77,62 +81,7 @@ const axiosClient = new AxiosHttpRequest({
     },
   }
 });
-const axiosClientFlask = new AxiosHttpRequest({
-  baseURL: "http://1333480939-dxkf8ofexh.ap-guangzhou.tencentscf.com",
-  timeout: 20 * 1000,
-  checkResultCode: false,
-  showLoading:true,
-  headers: {
-    'Content-Type': 'application/json'
-  } as AxiosRequestHeaders,
-  interceptorHooks: {
-    requestInterceptor: async (config) => {
-      // 在发送请求之前做一些处理，例如打印请求信息
-      Logger.debug('网络请求Request 请求方法:', `${config.method}`);
-      Logger.debug('网络请求Request 请求链接:', `${config.url}`);
-      Logger.debug('网络请求Request Params:', `\n${JSON.stringify(config.params)}`);
-      Logger.debug('网络请求Request Data:', `${JSON.stringify(config.data)}`);
-      axiosClient.config.showLoading = config.showLoading
-      if (config.showLoading) {
-        showLoadingDialog("加载中...")
-      }
-      return config;
-    },
-    requestInterceptorCatch: (err) => {
-      Logger.error("网络请求RequestError", err.toString())
-      if (axiosClient.config.showLoading) {
-        hideLoadingDialog()
-      }
-      return err;
-    },
-    responseInterceptor: (response) => {
-      //优先执行自己的请求响应拦截器，在执行通用请求request的
-      if (axiosClient.config.showLoading) {
-        hideLoadingDialog()
-      }
-      Logger.debug('网络请求响应Response:', `\n${JSON.stringify(response.data)}`);
-      if (response.status === 200) {
-        // @ts-ignore
-        const checkResultCode = response.config.checkResultCode
-        if (checkResultCode && response.data.errorCode != 0) {
-          showToast(response.data.errorMsg)
-          return Promise.reject(response)
-        }
-        return Promise.resolve(response);
-      } else {
-        return Promise.reject(response);
-      }
-    },
-    responseInterceptorCatch: (error) => {
-      if (axiosClient.config.showLoading) {
-        hideLoadingDialog()
-      }
-      Logger.error("网络请求响应异常", error.toString());
-      errorHandler(error);
-      return Promise.reject(error);
-    },
-  }
-});
+
 function errorHandler(error: any) {
   if (error instanceof AxiosError) {
     //showToast(error.message)
@@ -166,4 +115,4 @@ function errorHandler(error: any) {
   }
 }
 
-export  { axiosClient, HttpPromise, axiosClientFlask };
+export  { axiosClient, HttpPromise };

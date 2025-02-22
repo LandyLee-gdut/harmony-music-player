@@ -45,11 +45,7 @@ export class ApiConstant {
   /**
    * Base URL
    */
-  static readonly BASE_URL = "http://1333480939-2nw0dhpsvz.ap-guangzhou.tencentscf.com"
-  /**
-   * flask URL
-   */
-  static readonly BASE_URL_FLASK= "http://1333480939-dxkf8ofexh.ap-guangzhou.tencentscf.com"
+  static readonly BASE_URL = "your-serverless-api"
   /**
    * URL to get playlist detail info
    * params:

@@ -39,15 +39,6 @@ export struct MyGeDanPage {
   @State loadFail: boolean = false;
 
   async aboutToAppear() {
-      // 获取指定歌单信息：0-我的收藏 999-最近播放
-      // await getGeDan(this.list_id).then((res) => {
-      //   this.songList = res
-      //   this.isLoading = false;
-      // }).catch((err: Error) => {
-      //   this.isLoading = false;
-      //   this.loadFail = true;
-      //   console.log('error occur while loading ge dan:' + JSON.stringify(err))
-      // })
     if (this.list_id == 0) {
       this.songList = this.getRightGeDan(this.myFavourite.reverse())
     }else if (this.list_id == 999) {

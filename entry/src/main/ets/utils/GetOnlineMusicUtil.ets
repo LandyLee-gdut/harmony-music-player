@@ -8,13 +8,11 @@ import { CommonConstant as Const, ContentType } from '../constant/CommonConstant
 import { promptAction } from '@kit.ArkUI';
 import { SongListItem } from '../viewmodel/SongListItem';
 import { ApiConstant } from '../constant/ApiConstant';
-import { axiosClient, axiosClientFlask, HttpPromise } from './AxiosUtil';
+import { axiosClient, HttpPromise } from './AxiosUtil';
 import { Logger } from './Logger';
 import { SongItem } from '../viewmodel/SongItem';
 import { OhReport } from '@ohos/hypium';
 import { AxiosResponse } from '@ohos/axios';
-
-const BASE_URL = 'https://1333480939-2nw0dhpsvz.ap-guangzhou.tencentscf.com'
 
 export function getRandMusic(sort?: string):Promise<RandMusicItem> {
   return new Promise((resolve: Function, reject: Function) => {
@@ -60,9 +58,6 @@ export const getSongUrlAxios = (id: number, level: string = 'standard'): HttpPro
 export const getPlaylistDetailAxios = (id: number): HttpPromise<PlaylistI> => axiosClient.get({headers: undefined, url: ApiConstant.PLAYLIST_DETAIL + `?id=${id}&level=standard`})
 
 export const getSearchResultAxios = (keywords: string, limit: number = 20): HttpPromise<Result> => axiosClient.get({headers: undefined, url: ApiConstant.CLOUD_SEARCH + '?keywords=' + keywords + `&limit=${limit}` });
-
-export const getGeDanAxios = (list_id: number): HttpPromise<Result> => axiosClientFlask.get({headers: undefined, url: ApiConstant.GE_DAN + '?list_id=' + list_id });
-
 
 export interface SongDetailI{
   id: number,
