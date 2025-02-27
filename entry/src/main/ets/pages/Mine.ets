@@ -1,7 +1,6 @@
 import { StyleConstants } from "../constant/Constant"
 import { NavTitle } from '../components/NavTitle'
 import { UserInfoComponent } from "../components/UserInfoComponent"
-import { MoreFunctionComponent } from "../components/MoreFunctionComponent"
 import { Player } from "../components/Player"
 import { FunctionItem } from "../viewmodel/MineModel"
 import { SongItem } from "../viewmodel/SongItem"
@@ -127,6 +126,7 @@ export struct Mine {
             .backgroundColor($r('app.color.background_secondary'))
           UserInfoComponent()
             .margin({ top: 5 })
+          // 功能页面
           Row() {
             ForEach(this.functions, (item: FunctionItem) => {
               Column() {

@@ -3,6 +3,7 @@ import { list2str } from "../utils/CommonUtil";
 import { getAlbumDetailAxios, getPlaylistDetailAxios,
   getSearchResultAxios,
   getSongUrlAxios } from "../utils/GetOnlineMusicUtil";
+import { Logger } from "../utils/Logger";
 import { SongItem } from "./SongItem";
 import { songList } from "./SongListData";
 
@@ -10,6 +11,7 @@ import { songList } from "./SongListData";
  * Model for Main Page
  * Contains all the data that main page needs
  */
+const TAG = 'MineModel'
 export default class MainModel {
 }
 export interface SongItemI {
@@ -33,7 +35,8 @@ export async function getAlbumDetail(): Promise<SongItem[]> {
     console.debug('getting album with songs, axios message:' + JSON.stringify(res.data));
 
     let data = res.data;
-    let picUrl: string = data['album']['picUrl'];
+    let picUrl: string = data['album']['picUrl'] + '?param=250y250';
+    Logger.info(TAG, 'pic url is: ' + picUrl)
     console.log('song list data' + JSON.stringify(data));
     let playlists: SongItemI[] = data['songs'];
 
@@ -117,7 +120,7 @@ export async function getSearchResult(keywords: string): Promise<SongItem[]> {
       let artists: ArtistI[] = song.ar;
       let artists_name: string = list2str(artists, 'name');
       let artists_id: string = list2str(artists, 'id');
-      let picUrl: string = song.al['picUrl']
+      let picUrl: string = song.al['picUrl'] + '?param=400y400'
       let song_name: string = song.name;
       let song_id: number = song.id;
 

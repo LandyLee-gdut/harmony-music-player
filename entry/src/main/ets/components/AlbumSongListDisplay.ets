@@ -1,9 +1,7 @@
 /**
  * song list component
  */
-import { MediaService } from "../utils/MediaService";
 import { SongItem } from "../viewmodel/SongItem"
-import { songList } from '../viewmodel/SongListData'
 import { SongComponent } from "./SongComponent";
 import { curves } from "@kit.ArkUI";
 

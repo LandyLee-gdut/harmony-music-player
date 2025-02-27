@@ -37,7 +37,6 @@ export struct SongListDisplay {
                       singer: ''
                     }
                     this.pageInfos.pushPathByName('SongListPage', album)
-                    console.log('song list button clicked 2')
                   })
               }
             })

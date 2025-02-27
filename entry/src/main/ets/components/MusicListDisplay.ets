@@ -1,8 +1,5 @@
 import { StyleConstants } from "../constant/Constant";
-import { getFormattedName, MusicListDisplayItem } from '../viewmodel/MusicListDisplayItem'
-import { getRandMusic } from '../utils/GetOnlineMusicUtil'
-import { RandMusicItem } from "../viewmodel/RandMusicItem";
-import ResponseResult from "../viewmodel/ResponseResult";
+import { getFormattedName } from '../viewmodel/MusicListDisplayItem'
 import { SongItem } from "../viewmodel/SongItem";
 import { MediaService } from "../utils/MediaService";
 import { curves } from "@kit.ArkUI";

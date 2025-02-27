@@ -1,21 +1,11 @@
-import { AlbumDetailDisplay } from "../components/AlbumDetailDisplay"
 import { AlbumSongListDisplay } from "../components/AlbumSongListDisplay"
-import { getPlayListDetail } from "../viewmodel/MainModel"
-import { SongListItem } from "../viewmodel/SongListItem"
-import { JSON } from "@kit.ArkTS"
 import { SongItem } from "../viewmodel/SongItem"
-import { BusinessError } from "@kit.BasicServicesKit"
 import { LoadingComponent } from "../components/LoadingComponent"
 import { LoadingFailComponent } from "../components/LoadingFailComponent"
-import { MediaService } from "../utils/MediaService"
-import { GeDanItem } from "../viewmodel/GeDanItem"
-import { getGeDan } from "../viewmodel/MineModel"
 
 /**
  * Page of Song List, demonstrate the detail of song list like songs or image
  */
-
-
 @Builder
 export function MyGeDanPageBuilder(name: string, param: number) {
   MyGeDanPage({ list_id: param })

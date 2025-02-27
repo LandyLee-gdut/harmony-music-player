@@ -7,7 +7,11 @@ import { MusicControlComponent } from "./MusicControlComponent";
 import { curves, window } from "@kit.ArkUI";
 import { Logger } from "../utils/Logger";
 import { BusinessError } from "@kit.BasicServicesKit";
+import { MediaTools } from "../utils/MediaTools";
+import ImageCacheUtils from "../utils/ImageCacheUtils";
+import { JSON } from "@kit.ArkTS";
 
+const TAG = 'Player'
 /**
  * App界面下方的歌曲播放横栏
  * 用于控制歌曲播放、暂停、下一首
@@ -16,11 +20,11 @@ import { BusinessError } from "@kit.BasicServicesKit";
 @Component
 export struct Player {
   // 当前正在播放的歌曲index
-  @StorageProp('selectIndex') selectIndex: number = 0;
+  @StorageLink('selectIndex') @Watch('updateImage') selectIndex: number = 0;
   // 歌曲是否正在播放
   @StorageLink('isPlay') @Watch('animationFun') isPlay: boolean = false;
   // 全局歌单列表
-  @StorageLink('songList') songList: SongItem[] = [];
+  @StorageLink('songList') @Watch('updateImage') songList: SongItem[] = [];
   // padding参数
   @StorageLink('topArea') topArea: number = 0;
   @StorageLink('bottomArea') bottomArea: number = 0;
@@ -47,8 +51,21 @@ export struct Player {
     }
     this.imageRotate += 1;
   };
-
-  aboutToAppear() {
+  private imageCacheUtils: ImageCacheUtils = ImageCacheUtils.getInstance(AppStorage.get('context'));
+  @State image: PixelMap | undefined = undefined
+  async updateImage() {
+    await this.loadImage(this.songList[this.selectIndex].label as string);
+  }
+  private async loadImage(url: string) {
+    try {
+      this.image = await MediaTools.getPixelMapFromFile(await this.imageCacheUtils.getCachedImagePath(url));
+    } catch (err) {
+      Logger.error(TAG, JSON.stringify(url) + 'load image but failed: ' + JSON.stringify(err))
+    }
+  }
+  async aboutToAppear() {
+    Logger.info(TAG, 'the url is ' + JSON.stringify(this.songList[this.selectIndex]))
+    await this.loadImage(this.songList[this.selectIndex].label as string);
     let range : ExpectedFrameRateRange = {
       expected: 60,
       min: 0,
@@ -174,7 +191,7 @@ export struct Player {
       // Player左侧部份
       Row() {
         // 当前正在播放歌曲的专辑
-        Image(this.songList[this.selectIndex]?.label)
+        Image( this.image ? this.image : $r('app.media.ic_dream'))
           .height(32)
           .width(32)
           .margin({ right: 12 })

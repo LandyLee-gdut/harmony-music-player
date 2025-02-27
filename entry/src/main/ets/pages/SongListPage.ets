@@ -7,7 +7,6 @@ import { SongItem } from "../viewmodel/SongItem"
 import { BusinessError } from "@kit.BasicServicesKit"
 import { LoadingComponent } from "../components/LoadingComponent"
 import { LoadingFailComponent } from "../components/LoadingFailComponent"
-import { MediaService } from "../utils/MediaService"
 
 /**
  * Page of Song List, demonstrate the detail of song list like songs or image

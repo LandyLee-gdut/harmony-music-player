@@ -1,18 +1,25 @@
 import { StyleConstants } from "../constant/Constant"
-import { getRandMusic } from "../utils/GetOnlineMusicUtil"
-import { RandMusicItem } from "../viewmodel/RandMusicItem"
 import { SongListItem } from "../viewmodel/SongListItem"
-
+import ImageCacheUtils from '../utils/ImageCacheUtils'
+import { MediaTools } from '../utils/MediaTools'
 @Component
 export struct AlbumDisplay {
   @Prop songList: SongListItem;
+  private imageCacheUtils: ImageCacheUtils = ImageCacheUtils.getInstance(AppStorage.get('context'));
+  @State image: PixelMap | undefined = undefined
+  aboutToAppear() {
+    this.loadImage(this.songList.coverImgUrl as string);
+  }
 
+  private async loadImage(url: string) {
+    this.image = await MediaTools.getPixelMapFromFile(await this.imageCacheUtils.getCachedImagePath(url));
+  }
   build() {
     Column() {
       Stack() {
         Column() {
           Stack({ alignContent: Alignment.BottomEnd }){
-            Image(this.songList.coverImgUrl)
+            Image(this.image)
               .width('100%')
               .objectFit(ImageFit.Cover)
               .height(215)

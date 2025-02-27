@@ -5,6 +5,12 @@ import { MusicInfoComponent } from "./MusicInfoComponent";
 import { LyricsComponent } from "./LyricsComponent";
 import { TopAreaComponent } from "./TopAreaComponent";
 import { SongItem } from "../viewmodel/SongItem";
+import { MediaTools } from "../utils/MediaTools";
+import { effectKit } from "@kit.ArkGraphics2D";
+import { Logger } from "../utils/Logger";
+import { ColorConversion } from '../utils/ColorConversion'
+import ImageCacheUtils from "../utils/ImageCacheUtils";
+const TAG = 'MusicControlComponent'
 /**
  * 歌曲播放的主界面，由Player组件唤起，展示歌曲相关信息，可以作用滑动切换歌曲专辑封面页面和专辑歌词页
  */
@@ -13,9 +19,9 @@ export struct MusicControlComponent {
   // 判断折叠屏是否展开的变量
   // @StorageLink('isFoldFull') isFoldFull: boolean = false;
   // 歌单列表
-  @StorageLink('songList') songList: SongItem[] = [];
+  @StorageLink('songList') @Watch('getImageColor') songList: SongItem[] = [];
   // 正在播放的歌曲
-  @StorageProp('selectIndex') selectIndex: number = 0;
+  @StorageProp('selectIndex') @Watch('getImageColor') selectIndex: number = 0;
   // 背景颜色（全局取色）
   @StorageLink('imageColor') imageColor: string = 'rgba(0, 0, 2, 1.00)';
   // padding值的大小
@@ -33,9 +39,58 @@ export struct MusicControlComponent {
   @StorageLink('pageShowTime') pageShowTime: number = 0;
   // 判断是否展现当前页面（MusicControlComponent）的变量
   @Link isShowPlay: boolean;
+  // 背景图片
+  @State imageLabel: PixelMap | ResourceStr = this.songList[this.selectIndex].label
+  /**
+   * Get largest proportion color of an image.
+   */
+  private imageCacheUtils: ImageCacheUtils = ImageCacheUtils.getInstance(AppStorage.get('context'));
+  getImageColor() {
+    if (!this.context) {
+      return ;
+    }
+    this.imageCacheUtils.getCachedImagePath(this.songList[this.selectIndex].label as string).then((cacheDir) => {
+      MediaTools.getPixelMapFromFile(cacheDir).then((image) => {
+        effectKit.createColorPicker(image, (error, colorPicker) => {
+          if (error) {
+            Logger.error('Failed to create color picker.');
+          } else {
+            let color = colorPicker.getLargestProportionColor();
+            let colorArr = ColorConversion.dealColor(color.red, color.green, color.blue);
+            this.imageColor = `rgba(${colorArr[0]}, ${colorArr[1]}, ${colorArr[2]}, 1)`;
+          }
+          let headFilter = effectKit.createEffect(image);
+          if (headFilter !== null) {
+            headFilter.blur(30);
+            headFilter.getEffectPixelMap().then((value) => {
+              this.imageLabel = value;
+            })
+          }
+        })
+      })
+    })
 
+
+
+  }
+  private async loadImage(url: string): Promise<PixelMap> {
+    try {
+      return await MediaTools.getPixelMapFromFile(await this.imageCacheUtils.getCachedImagePath(url));
+    } catch (err) {
+      Logger.error(TAG, JSON.stringify(url) + 'load image but failed: ' + JSON.stringify(err))
+      throw new Error(`\'load image but failed: \' + JSON.stringify(err)`)
+    }
+  }
+  async aboutToAppear() {
+    await this.getImageColor()
+  }
   build() {
     Stack() {
+      Image(this.imageLabel)
+        .size({height: '150%'})
+        .aspectRatio(1)
+        .objectFit(ImageFit.Fill)
+        .opacity(0.5)
       Row() {
         Stack({ alignContent: Alignment.TopStart }) {
           // 用于左右切换的swiper
@@ -87,7 +142,6 @@ export struct MusicControlComponent {
             }
           })
           // 顶层区域：包括关闭musicControlComponent和分享功能
-
           TopAreaComponent({ isShowPlay: this.isShowPlay })
             .padding({
               left: $r('app.float.common_padding'),
@@ -103,6 +157,7 @@ export struct MusicControlComponent {
     }
     .height(StyleConstants.FULL_HEIGHT)
     .width(StyleConstants.FULL_WIDTH)
+    .backgroundColor(this.imageColor)
     .backgroundBlurStyle(BlurStyle.BACKGROUND_ULTRA_THICK)
   }
 }

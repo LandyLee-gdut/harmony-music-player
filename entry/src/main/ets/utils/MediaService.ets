@@ -13,7 +13,8 @@ import { BackgroundUtil } from "./BackgroundUtil";
 import { PreferencesUtil } from "./PreferencesUtil";
 import { SongConstants } from "../constant/SongConstants";
 import { CardData } from "../viewmodel/CardData";
-import { backgroundTaskManager } from '@kit.BackgroundTasksKit';
+import { JSON } from "@kit.ArkTS";
+import image from '@ohos.multimedia.image';
 
 const TAG = 'MediaService';
 
@@ -257,31 +258,45 @@ export class MediaService {
   async setAVMetadata() {
     let id = this.musicIndex;
     try {
-      if (this.context) {
-        let mediaImage = await MediaTools.getPixelMapFromResource(this.context,
-          this.songList[this.musicIndex].label as resourceManager.Resource);
-        Logger.info(TAG, 'getPixelMapFromResource success' + JSON.stringify(mediaImage));
-        let metadata: avSession.AVMetadata = {
-          assetId: `${id}`,
-          title: this.songList[this.musicIndex].title,
-          artist: this.songList[this.musicIndex].singer,
-          mediaImage: mediaImage,
-          duration: this.getDuration()
-        };
-        if (this.session) {
-          this.session.setAVMetadata(metadata).then(() => {
-            Logger.info(TAG, 'SetAVMetadata successfully');
-          }).catch((err: BusinessError) => {
-            Logger.error(TAG, `SetAVMetadata BusinessError: code: ${err.code}, message: ${err.message}`);
-          });
-        }
+      if (!this.context) {
+        Logger.error(TAG, 'Context is undefined');
+        return;
+      }
+
+      // 假设 label 是网络 URL 字符串
+      const imageUrl = this.songList[this.musicIndex].label as string;
+      let mediaImage: image.PixelMap | undefined = await MediaTools.getPixelMapFromUrlWithCache(imageUrl, this.context);
+
+      // 如果网络图片加载失败，尝试使用默认本地资源
+      if (!mediaImage) {
+        Logger.warn(TAG, 'Failed to load network image, falling back to default');
+        mediaImage = await MediaTools.getPixelMapFromResource(
+          this.context, $r('app.media.ic_dream') // 默认图片资源
+        );
+      }
+
+      Logger.info(TAG, 'Media image loaded successfully: ' + JSON.stringify(mediaImage));
+
+      // 构建 AVMetadata
+      let metadata: avSession.AVMetadata = {
+        assetId: `${id}`,
+        title: this.songList[this.musicIndex].title,
+        artist: this.songList[this.musicIndex].singer,
+        mediaImage: mediaImage, // mediaImage 已确保非 undefined
+        duration: this.getDuration()
+      };
+
+      if (this.session) {
+        await this.session.setAVMetadata(metadata);
+        Logger.info(TAG, 'SetAVMetadata successfully');
+      } else {
+        Logger.error(TAG, 'AVSession is undefined');
       }
     } catch (error) {
-      Logger.error(TAG, `SetAVMetadata try: code: ${(error as BusinessError).code},
-       message: ${(error as BusinessError).message}`);
+      const err = error as BusinessError;
+      Logger.error(TAG, `SetAVMetadata failed: code: ${err.code}, message: ${err.message}`);
     }
   }
-
   /**
    * Play music by index.
    *
@@ -606,7 +621,8 @@ export class MediaService {
         cardSongList: cardSongList
       }
       let formInfo = formBindingData.createFormBindingData(formData);
-
+      console.log('card data:', JSON.stringify(formData))
+      console.log('form id:', JSON.stringify(formInfo))
       this.formIds.forEach(formId => {
         formProvider.updateForm(formId, formInfo).then(() => {
           Logger.info(TAG, 'WANG updateForm data succeed' + ', formId:' + formId);

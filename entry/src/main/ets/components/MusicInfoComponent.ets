@@ -2,6 +2,8 @@ import { StyleConstants } from "../constant/Constant"
 import { SongItem } from "../viewmodel/SongItem";
 import { ControlAreaComponent } from './ControlAreaComponent'
 import { promptAction } from "@kit.ArkUI";
+import ImageCacheUtils from "../utils/ImageCacheUtils";
+import { MediaTools } from "../utils/MediaTools";
 
 /**
  * 歌曲播放的主页面
@@ -14,9 +16,9 @@ export struct MusicInfoComponent {
   // ?
   @StorageLink('isFoldFull') isFoldFull: boolean = false;
   // 全局歌单对象
-  @StorageLink('songList') songList: SongItem[] = [];
+  @StorageLink('songList') @Watch('updateImage') songList: SongItem[] = [];
   // 全局正在播放的歌曲index
-  @StorageProp('selectIndex') selectIndex: number = 0;
+  @StorageProp('selectIndex') @Watch('updateImage') selectIndex: number = 0;
   // 我的收藏
   @StorageLink('myFavourite') myFavourite: SongItem[] = []
   public addMyFavouritePlay(songItem: SongItem) {
@@ -26,13 +28,27 @@ export struct MusicInfoComponent {
     }
     this.myFavourite.push(songItem);
   }
+
+  async updateImage() {
+    await this.loadImage(this.songList[this.selectIndex].label as string);
+  }
   // ?
   @State isShowControl: boolean = false;
+  private imageCacheUtils: ImageCacheUtils = ImageCacheUtils.getInstance(AppStorage.get('context'));
+  @State image: PixelMap | undefined = undefined
+  aboutToAppear() {
+    this.loadImage(this.songList[this.selectIndex].label as string);
+  }
+
+  private async loadImage(url: string) {
+    this.image = await MediaTools.getPixelMapFromFile(await this.imageCacheUtils.getCachedImagePath(url));
+  }
+
   // 专辑封面
   @Builder
   CoverInfo() {
     Row() {
-      Image(this.songList[this.selectIndex].label)
+      Image(this.image)
         .width(StyleConstants.FULL_WIDTH)
         // 设置图片的比例
         .aspectRatio(1)
@@ -44,7 +60,7 @@ export struct MusicInfoComponent {
           offsetY: 8
         })
           // 配置专辑封面共享元素效果
-        .geometryTransition('songLabel', { follow: true })
+        .geometryTransition('songLabel')
         .clip(true)
         .transition(TransitionEffect.OPACITY.animation({ duration: 350, curve: Curve.Friction }))
     }

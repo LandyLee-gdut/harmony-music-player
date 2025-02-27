@@ -2,17 +2,13 @@ import { AlbumDisplay } from "../components/AlbumDisplay"
 import { MusicListDisplay } from "../components/MusicListDisplay"
 import { NavTitle } from "../components/NavTitle"
 import { Player } from "../components/Player"
-import { SearchBar } from "../components/SearchBar"
 import { SongList, SongListDisplay } from "../components/SongListDisplay"
 import { StyleConstants } from "../constant/Constant"
-import { getAlbumDetailAxios, getRecommendSongListAxios, getSingerSongsListAxios } from "../utils/GetOnlineMusicUtil"
+import { getRecommendSongListAxios, getSingerSongsListAxios } from "../utils/GetOnlineMusicUtil"
 import { Logger } from "../utils/Logger"
 import { MediaService } from "../utils/MediaService"
-import { AlbumDisplayItem } from "../viewmodel/AlbumDisplayItem"
 import MainModel, { getAlbumDetail, getSearchResult } from "../viewmodel/MainModel"
-import { MusicListDisplayItem } from "../viewmodel/MusicListDisplayItem"
 import { songList } from "../viewmodel/SongListData"
-import { SongListDisplayItem } from "../viewmodel/SongListDisplayItem"
 import { BusinessError } from "@kit.BasicServicesKit"
 import { SongListItem } from "../viewmodel/SongListItem"
 import { JSON } from "@kit.ArkTS"
@@ -79,7 +75,7 @@ export struct Main {
         const playlist = playlists[index];
         let list_id = playlist.id
         let list_name = playlist.name
-        let cover:ResourceStr = playlist.coverImgUrl
+        let cover:ResourceStr = playlist.coverImgUrl + '?param=400y400'
         let update_time: string | number | undefined = playlist.updateTime
         this.songListItems1.push({
           'id': list_id,
@@ -93,7 +89,7 @@ export struct Main {
         const playlist = playlists[index];
         let list_id = playlist.id
         let list_name = playlist.name
-        let cover:ResourceStr = playlist.coverImgUrl
+        let cover:ResourceStr = playlist.coverImgUrl + '?param=400y400'
         let update_time: string | number | undefined = playlist.updateTime
         this.songListItems2.push({
           'id': list_id,
@@ -107,7 +103,7 @@ export struct Main {
         const playlist = playlists[index];
         let list_id = playlist.id
         let list_name = playlist.name
-        let cover:ResourceStr = playlist.coverImgUrl
+        let cover:ResourceStr = playlist.coverImgUrl + '?param=400y400'
         let update_time: string | number | undefined = playlist.updateTime
         this.songListItems3.push({
           'id': list_id,
@@ -123,6 +119,7 @@ export struct Main {
       this.isLoading = true;
       this.loadingFail = true
     });
+
     await getAlbumDetail().then((res: SongItem[]) => {
       this.loveList = res;
       AppStorage.setOrCreate('songList', this.loveList)
@@ -158,6 +155,7 @@ export struct Main {
                       .onClick(() => {
                         this.triggerValueReplace = this.triggerValueReplace + 1;
                       })
+
                     TextInput({ text: this.inputText, placeholder: $r('app.string.SearchBar_placeholder')})
                       .placeholderColor(Color.Grey)
                       .backgroundColor($r('app.color.comp_background_gray'))
@@ -215,7 +213,7 @@ export struct Main {
                   MusicListDisplay({ title: '猜你喜欢', list: this.loveList })
 
                   BlankSpace()
-
+                  // 歌单推荐1
                   Column() {
                     // title
                     Row() {
@@ -254,6 +252,7 @@ export struct Main {
                       .scrollBar(BarState.Off)
                     }
                   }
+                  // 歌单推荐2
                   Column() {
                     // title
                     Row() {
