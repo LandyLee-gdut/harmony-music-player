@@ -45,7 +45,7 @@ export class ApiConstant {
   /**
    * Base URL
    */
-  static readonly BASE_URL = "http://1333480939-2nw0dhpsvz.ap-guangzhou.tencentscf.com"
+  static readonly BASE_URL = "YOUR API URL"
   /**
    * URL to get playlist detail info
    * params:
