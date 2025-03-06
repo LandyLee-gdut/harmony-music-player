@@ -45,7 +45,7 @@ export class ApiConstant {
   /**
    * Base URL
    */
-  static readonly BASE_URL = "YOUR API URL"
+  static readonly BASE_URL = "YOUR BASE URL"
   /**
    * URL to get playlist detail info
    * params:

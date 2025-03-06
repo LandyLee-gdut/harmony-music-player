@@ -9,10 +9,7 @@ import { promptAction } from '@kit.ArkUI';
 import { SongListItem } from '../viewmodel/SongListItem';
 import { ApiConstant } from '../constant/ApiConstant';
 import { axiosClient, HttpPromise } from './AxiosUtil';
-import { Logger } from './Logger';
 import { SongItem } from '../viewmodel/SongItem';
-import { OhReport } from '@ohos/hypium';
-import { AxiosResponse } from '@ohos/axios';
 
 export function getRandMusic(sort?: string):Promise<RandMusicItem> {
   return new Promise((resolve: Function, reject: Function) => {

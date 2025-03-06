@@ -1,7 +1,7 @@
 import { StyleConstants } from "../constant/Constant"
 import { SongItem } from "../viewmodel/SongItem";
 import { ControlAreaComponent } from './ControlAreaComponent'
-import { promptAction } from "@kit.ArkUI";
+import { curves, promptAction } from "@kit.ArkUI";
 import ImageCacheUtils from "../utils/ImageCacheUtils";
 import { MediaTools } from "../utils/MediaTools";
 
@@ -62,7 +62,7 @@ export struct MusicInfoComponent {
           // 配置专辑封面共享元素效果
         .geometryTransition('songLabel')
         .clip(true)
-        .transition(TransitionEffect.OPACITY.animation({ duration: 350, curve: Curve.Friction }))
+        .transition(TransitionEffect.OPACITY.animation({ duration: 500, curve: curves.springMotion() }).combine(TransitionEffect.scale({x:0, y: 0})))
     }
     .margin($r('app.float.lyric_margin_right_sm'))
   }

@@ -5,6 +5,10 @@ import {AxiosRequestHeaders,AxiosError } from '@ohos/axios';
 import { Logger } from './Logger';
 import { promptAction } from "@kit.ArkUI";
 import { ApiConstant } from '../constant/ApiConstant'
+
+// 腾讯云Serverless服务的URL
+const BASE_URL = ApiConstant.BASE_URL
+
 function showToast(msg:string){
   Logger.debug(msg)
   promptAction.showToast({ message: msg })
@@ -18,9 +22,6 @@ function showLoadingDialog(msg:string){
 function hideLoadingDialog() {
 
 }
-
-
-const BASE_URL = ApiConstant.BASE_URL
 
 /**
  * axios请求客户端创建
@@ -115,4 +116,5 @@ function errorHandler(error: any) {
   }
 }
 
+// 导出Axios实例
 export  { axiosClient, HttpPromise };

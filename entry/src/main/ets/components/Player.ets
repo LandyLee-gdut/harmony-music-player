@@ -202,7 +202,7 @@ export struct Player {
             // 对头像绑定共享元素转场的id
           .geometryTransition('songLabel')
           .borderRadius($r('app.float.cover_radius_label'))
-          .transition(TransitionEffect.opacity(0.99))
+          .transition(TransitionEffect.opacity(0.99).animation({ curve: curves.springMotion(0.6, 0.8), duration: 500 }).combine(TransitionEffect.scale({x:0, y: 0})))
           .onClick(() => {
             this.onAvatarClicked()
           })
